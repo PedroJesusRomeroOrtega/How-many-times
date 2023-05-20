@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {IonicModule} from '@ionic/angular';
-import {ProductGroupListComponent} from './product-group-list/product-group-list.component';
+import {ProductGroupListComponent} from './products';
 
 @Component({
   selector: 'app-root',

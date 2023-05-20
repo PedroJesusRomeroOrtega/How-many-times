@@ -8,6 +8,7 @@ import {CommonModule} from '@angular/common';
 import {IonModal, IonicModule} from '@ionic/angular';
 import {OverlayEventDetail} from '@ionic/core/components';
 import {FormsModule} from '@angular/forms';
+import {ProductService} from '../product.service';
 
 @Component({
   selector: 'app-product-group-list',
@@ -20,11 +21,9 @@ import {FormsModule} from '@angular/forms';
 export class ProductGroupListComponent {
   @ViewChild(IonModal) modal!: IonModal;
   name = '';
-  productGroups = signal<ProductGroup[]>([
-    {name: 'Kitesurf'},
-    {name: 'Bikes'},
-    {name: 'Scuba'},
-  ]);
+  productGroups = this.productService.productGroups;
+
+  constructor(private productService: ProductService) {}
 
   cancel() {
     this.modal.dismiss(null, 'cancel');
@@ -37,15 +36,7 @@ export class ProductGroupListComponent {
   onWillDismiss(event: Event) {
     const ev = event as CustomEvent<OverlayEventDetail<string>>;
     if (ev.detail.role === 'confirm') {
-      this.addProductGroup(ev.detail.data || '');
+      this.productService.addProductGroup(ev.detail.data || '');
     }
   }
-
-  private addProductGroup(name: string) {
-    this.productGroups.mutate((productGroups) => productGroups.push({name}));
-  }
-}
-
-interface ProductGroup {
-  name: string;
 }
