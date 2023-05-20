@@ -1,12 +1,11 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import {Component} from '@angular/core';
+import {IonicModule} from '@ionic/angular';
+import {ProductGroupListComponent} from './product-group-list/product-group-list.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, IonicModule],
+  imports: [IonicModule, ProductGroupListComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
