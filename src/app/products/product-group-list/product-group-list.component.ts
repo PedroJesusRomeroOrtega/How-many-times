@@ -7,13 +7,13 @@ import {
 import {CommonModule} from '@angular/common';
 import {IonModal, IonicModule} from '@ionic/angular';
 import {OverlayEventDetail} from '@ionic/core/components';
-import {FormsModule} from '@angular/forms';
 import {ProductService} from '../product.service';
+import {ProductGroupNewComponent} from '../product-group-new/product-group-new.component';
 
 @Component({
   selector: 'app-product-group-list',
   standalone: true,
-  imports: [CommonModule, IonicModule, FormsModule],
+  imports: [CommonModule, IonicModule, ProductGroupNewComponent],
   templateUrl: './product-group-list.component.html',
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,8 +29,8 @@ export class ProductGroupListComponent {
     this.modal.dismiss(null, 'cancel');
   }
 
-  confirm() {
-    this.modal.dismiss(this.name, 'confirm');
+  confirm(groupName: string) {
+    this.modal.dismiss(groupName, 'confirm');
   }
 
   onWillDismiss(event: Event) {

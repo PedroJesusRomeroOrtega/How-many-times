@@ -20,27 +20,10 @@
 
   <ion-modal trigger="add-product-group" (willDismiss)="onWillDismiss($event)">
     <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <ion-buttons slot="start">
-            <ion-button (click)="cancel()">Cancel</ion-button>
-          </ion-buttons>
-          <ion-title>Create group</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <ion-item>
-          <ion-label position="stacked">Enter your name</ion-label>
-          <ion-input
-            type="text"
-            placeholder="Group name"
-            [(ngModel)]="name"
-          ></ion-input>
-        </ion-item>
-      </ion-content>
+      <app-product-group-new
+        (cancelEvent)="cancel()"
+        (confirmEvent)="confirm($event)"
+      ></app-product-group-new>
     </ng-template>
   </ion-modal>
 </ion-content>
