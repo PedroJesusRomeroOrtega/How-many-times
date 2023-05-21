@@ -5,20 +5,25 @@
     </ion-buttons>
     <ion-title>Create group</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+      <ion-button
+        (click)="confirm()"
+        [strong]="true"
+        [disabled]="!productGroupName.valid"
+        >Confirm</ion-button
+      >
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding">
-  <ion-item>
-    <ion-label position="floating">Group name</ion-label>
-    <ion-input
-      type="text"
-      placeholder="Enter group name"
-      clearInput="true"
-      [counter]="true"
-      maxlength="35"
-      [(ngModel)]="name"
-    ></ion-input>
-  </ion-item>
+<ion-content class="ion-padding" [fullscreen]="true">
+  <ion-input
+    type="text"
+    label="Group name"
+    labelPlacement="floating"
+    placeholder="Enter group name"
+    clearInput="true"
+    [counter]="true"
+    [maxlength]="MAX_PRODUCTGROUP_NAME_LENGTH"
+    [formControl]="productGroupName"
+    [errorText]="errorMessage(productGroupName)"
+  ></ion-input>
 </ion-content>
