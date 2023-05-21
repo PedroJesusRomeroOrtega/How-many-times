@@ -16,4 +16,10 @@ export class ProductService {
       productGroups.push({name: groupName})
     );
   }
+
+  deleteProductGroup(productGroup: ProductGroup) {
+    this.productGroups.update((productGroups) =>
+      productGroups.filter((pg) => pg.name !== productGroup.name)
+    );
+  }
 }

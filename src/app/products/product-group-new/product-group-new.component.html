@@ -9,12 +9,15 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" [fullscreen]="true">
   <ion-item>
-    <ion-label position="stacked">Enter your name</ion-label>
+    <ion-label position="floating">Group name</ion-label>
     <ion-input
       type="text"
-      placeholder="Group name"
+      placeholder="Enter group name"
+      clearInput="true"
+      [counter]="true"
+      maxlength="10"
       [(ngModel)]="name"
     ></ion-input>
   </ion-item>

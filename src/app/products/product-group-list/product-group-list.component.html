@@ -9,8 +9,11 @@
   <ion-list>
     <ion-item *ngFor="let productGroup of productGroups()">
       <ion-label>{{ productGroup.name }}</ion-label>
-    </ion-item></ion-list
-  >
+      <ion-button slot="end" (click)="presentActionSheet(productGroup)">
+        <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
 
   <ion-fab vertical="bottom" horizontal="center">
     <ion-fab-button id="add-product-group">
@@ -18,12 +21,16 @@
     </ion-fab-button>
   </ion-fab>
 
-  <ion-modal trigger="add-product-group" (willDismiss)="onWillDismiss($event)">
+  <ion-modal
+    trigger="add-product-group"
+    (willDismiss)="onWillDismissModal($event)"
+  >
     <ng-template>
       <app-product-group-new
         (cancelEvent)="cancel()"
         (confirmEvent)="confirm($event)"
-      ></app-product-group-new>
+      >
+      </app-product-group-new>
     </ng-template>
   </ion-modal>
 </ion-content>
