@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Output,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {IonicModule, ModalController} from '@ionic/angular';
@@ -17,7 +12,7 @@ import {IonicModule, ModalController} from '@ionic/angular';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductGroupNewComponent {
-  name = '';
+  @Input() name = '';
 
   constructor(private modalCtrl: ModalController) {}
 

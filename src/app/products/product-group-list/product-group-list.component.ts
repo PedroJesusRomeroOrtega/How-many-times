@@ -34,9 +34,9 @@ export class ProductGroupListComponent {
         },
       },
       {
-        text: 'Share',
+        text: 'Edit',
         data: {
-          action: 'share',
+          action: 'edit',
         },
       },
       {
@@ -55,23 +55,16 @@ export class ProductGroupListComponent {
     private modalCtrl: ModalController
   ) {}
 
-  cancel() {
-    this.modal.dismiss(null, 'cancel');
-  }
-
-  confirm(groupName: string) {
-    this.modal.dismiss(groupName, 'confirm');
-  }
-
-  async openModal() {
+  async openModal(productGroup: ProductGroup | undefined = undefined) {
     const modal = await this.modalCtrl.create({
       component: ProductGroupNewComponent,
+      componentProps: {'name': productGroup?.name},
     });
     await modal.present();
 
     const {data, role} = await modal.onWillDismiss();
     if (role === 'confirm') {
-      this.productService.addProductGroup(data || '');
+      this.handleModalResults(productGroup, data);
     }
   }
 
@@ -81,7 +74,7 @@ export class ProductGroupListComponent {
     );
 
     await actionSheet.present();
-    const result = await actionSheet.onDidDismiss();
+    const result = await actionSheet.onWillDismiss();
     this.handleActionSheetResults(result, productGroup);
   }
 
@@ -89,8 +82,22 @@ export class ProductGroupListComponent {
     result: OverlayEventDetail,
     productGroup: ProductGroup
   ) {
-    if (result?.data?.action === 'delete') {
+    const action = result?.data?.action;
+    if (action === 'delete') {
       this.productService.deleteProductGroup(productGroup);
+    } else if (action === 'edit') {
+      this.openModal(productGroup);
+    }
+  }
+
+  private handleModalResults(
+    productGroup: ProductGroup | undefined,
+    result: string | undefined
+  ) {
+    if (productGroup) {
+      this.productService.editProductGroup(productGroup, result || '');
+    } else {
+      this.productService.addProductGroup(result || '');
     }
   }
 }

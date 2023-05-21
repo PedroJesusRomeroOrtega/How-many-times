@@ -17,9 +17,17 @@ export class ProductService {
     );
   }
 
+  editProductGroup(productGroup: ProductGroup, newProductGroupName: string) {
+    this.productGroups.update((pgs) =>
+      pgs.map((pg) =>
+        pg.name === productGroup.name ? {name: newProductGroupName} : pg
+      )
+    );
+  }
+
   deleteProductGroup(productGroup: ProductGroup) {
-    this.productGroups.update((productGroups) =>
-      productGroups.filter((pg) => pg.name !== productGroup.name)
+    this.productGroups.update((pgs) =>
+      pgs.filter((pg) => pg.name !== productGroup.name)
     );
   }
 }
