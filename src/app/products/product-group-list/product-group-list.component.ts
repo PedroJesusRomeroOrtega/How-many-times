@@ -5,6 +5,7 @@ import {
   ActionSheetOptions,
   IonModal,
   IonicModule,
+  ModalController,
 } from '@ionic/angular';
 import {OverlayEventDetail} from '@ionic/core/components';
 import {ProductService} from '../product.service';
@@ -50,7 +51,8 @@ export class ProductGroupListComponent {
 
   constructor(
     private productService: ProductService,
-    private actionSheetCtrl: ActionSheetController
+    private actionSheetCtrl: ActionSheetController,
+    private modalCtrl: ModalController
   ) {}
 
   cancel() {
@@ -61,10 +63,15 @@ export class ProductGroupListComponent {
     this.modal.dismiss(groupName, 'confirm');
   }
 
-  onWillDismissModal(event: Event) {
-    const ev = event as CustomEvent<OverlayEventDetail<string>>;
-    if (ev.detail.role === 'confirm') {
-      this.productService.addProductGroup(ev.detail.data || '');
+  async openModal() {
+    const modal = await this.modalCtrl.create({
+      component: ProductGroupNewComponent,
+    });
+    await modal.present();
+
+    const {data, role} = await modal.onWillDismiss();
+    if (role === 'confirm') {
+      this.productService.addProductGroup(data || '');
     }
   }
 

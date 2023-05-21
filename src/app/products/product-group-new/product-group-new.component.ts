@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {IonicModule} from '@ionic/angular';
+import {IonicModule, ModalController} from '@ionic/angular';
 
 @Component({
   selector: 'app-product-group-new',
@@ -18,14 +18,14 @@ import {IonicModule} from '@ionic/angular';
 })
 export class ProductGroupNewComponent {
   name = '';
-  @Output() cancelEvent = new EventEmitter();
-  @Output() confirmEvent = new EventEmitter<string>();
+
+  constructor(private modalCtrl: ModalController) {}
 
   cancel() {
-    this.cancelEvent.emit();
+    return this.modalCtrl.dismiss(null, 'cancel');
   }
 
   confirm() {
-    this.confirmEvent.emit(this.name);
+    return this.modalCtrl.dismiss(this.name, 'confirm');
   }
 }

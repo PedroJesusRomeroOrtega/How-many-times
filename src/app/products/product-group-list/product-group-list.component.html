@@ -16,21 +16,8 @@
   </ion-list>
 
   <ion-fab vertical="bottom" horizontal="center">
-    <ion-fab-button id="add-product-group">
+    <ion-fab-button (click)="openModal()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-
-  <ion-modal
-    trigger="add-product-group"
-    (willDismiss)="onWillDismissModal($event)"
-  >
-    <ng-template>
-      <app-product-group-new
-        (cancelEvent)="cancel()"
-        (confirmEvent)="confirm($event)"
-      >
-      </app-product-group-new>
-    </ng-template>
-  </ion-modal>
 </ion-content>
