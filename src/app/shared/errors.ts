@@ -4,6 +4,7 @@ export const defaultErrors = new Map<string, string>();
 defaultErrors.set('required', 'Is required');
 defaultErrors.set('minlength', 'Text must be longer');
 defaultErrors.set('maxlength', 'Text must be shorter');
+defaultErrors.set('notUniqueProductGroupName', 'This name already exists');
 
 export const errorMessage = (formControl: FormControl): string => {
   const errors = formControl.errors;

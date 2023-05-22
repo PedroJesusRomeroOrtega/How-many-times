@@ -30,4 +30,18 @@ export class ProductService {
       pgs.filter((pg) => pg.name !== productGroup.name)
     );
   }
+
+  existProductGroupByName(productGroupName: string): boolean {
+    return !!this.findProductGroupByName(productGroupName);
+  }
+
+  private findProductGroupByName(
+    productGroupName: string
+  ): ProductGroup | undefined {
+    const productGroupNameFormatted = productGroupName.toUpperCase().trim();
+    const product = this.productGroups().find(
+      (pg) => pg.name.toUpperCase() === productGroupNameFormatted
+    );
+    return product;
+  }
 }

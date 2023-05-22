@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {IonicModule, ModalController} from '@ionic/angular';
-import {errorMessage} from 'src/app/shared';
+import {CustomValidators, errorMessage} from 'src/app/shared';
 
 @Component({
   selector: 'app-product-group-new',
@@ -19,6 +19,7 @@ export class ProductGroupNewComponent implements OnInit {
     Validators.required,
     Validators.minLength(3),
     Validators.maxLength(this.MAX_PRODUCTGROUP_NAME_LENGTH),
+    CustomValidators.uniqueProductGroupName(),
   ]);
   errorMessage = errorMessage;
 
