@@ -5,6 +5,7 @@ defaultErrors.set('required', 'Is required');
 defaultErrors.set('minlength', 'Text must be longer');
 defaultErrors.set('maxlength', 'Text must be shorter');
 defaultErrors.set('notUniqueProductGroupName', 'This name already exists');
+defaultErrors.set('noWhitespaceValidator', 'Not only white space are allowed');
 
 export const errorMessage = (formControl: FormControl): string => {
   const errors = formControl.errors;

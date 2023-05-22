@@ -20,6 +20,7 @@ export class ProductGroupNewComponent implements OnInit {
     Validators.minLength(3),
     Validators.maxLength(this.MAX_PRODUCTGROUP_NAME_LENGTH),
     CustomValidators.uniqueProductGroupName(),
+    CustomValidators.noWhitespaceValidator(),
   ]);
   errorMessage = errorMessage;
 
@@ -34,6 +35,9 @@ export class ProductGroupNewComponent implements OnInit {
   }
 
   confirm() {
-    return this.modalCtrl.dismiss(this.productGroupName.value, 'confirm');
+    return this.modalCtrl.dismiss(
+      this.productGroupName.value?.trim(),
+      'confirm'
+    );
   }
 }
