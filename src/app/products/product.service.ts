@@ -1,34 +1,62 @@
 import {Injectable, signal} from '@angular/core';
 import {ProductGroup} from './product';
+import {Preferences} from '@capacitor/preferences';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
-  productGroups = signal<ProductGroup[]>([
-    {name: 'Kitesurf'},
-    {name: 'Bikes'},
-    {name: 'Scuba'},
-  ]);
+  private PREFERENCES_PRODUCTGROUP_KEY = 'productGroup';
+  productGroups = signal<ProductGroup[]>([]);
 
-  addProductGroup(groupName: string) {
+  constructor() {
+    this.getProductGroups();
+  }
+
+  async getProductGroups() {
+    const {value} = await Preferences.get({
+      key: this.PREFERENCES_PRODUCTGROUP_KEY,
+    });
+    this.productGroups.set(value ? JSON.parse(value) : ([] as ProductGroup[]));
+  }
+
+  async addProductGroup(groupName: string) {
     this.productGroups.mutate((productGroups) =>
       productGroups.push({name: groupName})
     );
+
+    //TODO: encapsulate in a storage service
+    await Preferences.set({
+      key: this.PREFERENCES_PRODUCTGROUP_KEY,
+      value: JSON.stringify(this.productGroups()),
+    });
   }
 
-  editProductGroup(productGroup: ProductGroup, newProductGroupName: string) {
+  async editProductGroup(
+    productGroup: ProductGroup,
+    newProductGroupName: string
+  ) {
     this.productGroups.update((pgs) =>
       pgs.map((pg) =>
         pg.name === productGroup.name ? {name: newProductGroupName} : pg
       )
     );
+
+    await Preferences.set({
+      key: this.PREFERENCES_PRODUCTGROUP_KEY,
+      value: JSON.stringify(this.productGroups()),
+    });
   }
 
-  deleteProductGroup(productGroup: ProductGroup) {
+  async deleteProductGroup(productGroup: ProductGroup) {
     this.productGroups.update((pgs) =>
       pgs.filter((pg) => pg.name !== productGroup.name)
     );
+
+    await Preferences.set({
+      key: this.PREFERENCES_PRODUCTGROUP_KEY,
+      value: JSON.stringify(this.productGroups()),
+    });
   }
 
   existProductGroupByName(productGroupName: string): boolean {
