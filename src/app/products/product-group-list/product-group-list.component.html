@@ -1,0 +1,23 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title size="large"> How many times used? </ion-title>
+  </ion-toolbar>
+</ion-header>
+<!-- Group list -->
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <ion-item *ngFor="let productGroup of productGroups()">
+      <ion-label>{{ productGroup.name }}</ion-label>
+      <ion-button slot="end" (click)="presentActionSheet(productGroup)">
+        <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="center">
+    <ion-fab-button (click)="openModal()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
