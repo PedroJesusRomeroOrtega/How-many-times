@@ -11,11 +11,12 @@ import {OverlayEventDetail} from '@ionic/core/components';
 import {ProductGroupNewComponent} from '../product-group-new/product-group-new.component';
 import {ProductGroup} from '../product';
 import {ProductService} from '../services';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-product-group-list',
   standalone: true,
-  imports: [CommonModule, IonicModule, ProductGroupNewComponent],
+  imports: [CommonModule, IonicModule, ProductGroupNewComponent, RouterLink],
   templateUrl: './product-group-list.component.html',
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
