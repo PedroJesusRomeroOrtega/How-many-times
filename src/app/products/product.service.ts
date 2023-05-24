@@ -1,23 +1,15 @@
 import {Injectable, signal} from '@angular/core';
 import {ProductGroup} from './product';
-import {Preferences} from '@capacitor/preferences';
+import {ProductStorageService} from './product-storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
-  private PREFERENCES_PRODUCTGROUP_KEY = 'productGroup';
   productGroups = signal<ProductGroup[]>([]);
 
-  constructor() {
+  constructor(private productStorageService: ProductStorageService) {
     this.getProductGroups();
-  }
-
-  async getProductGroups() {
-    const {value} = await Preferences.get({
-      key: this.PREFERENCES_PRODUCTGROUP_KEY,
-    });
-    this.productGroups.set(value ? JSON.parse(value) : ([] as ProductGroup[]));
   }
 
   async addProductGroup(groupName: string) {
@@ -25,11 +17,7 @@ export class ProductService {
       productGroups.push({name: groupName})
     );
 
-    //TODO: encapsulate in a storage service
-    await Preferences.set({
-      key: this.PREFERENCES_PRODUCTGROUP_KEY,
-      value: JSON.stringify(this.productGroups()),
-    });
+    await this.productStorageService.setProductGroups(this.productGroups());
   }
 
   async editProductGroup(
@@ -42,10 +30,7 @@ export class ProductService {
       )
     );
 
-    await Preferences.set({
-      key: this.PREFERENCES_PRODUCTGROUP_KEY,
-      value: JSON.stringify(this.productGroups()),
-    });
+    await this.productStorageService.setProductGroups(this.productGroups());
   }
 
   async deleteProductGroup(productGroup: ProductGroup) {
@@ -53,10 +38,7 @@ export class ProductService {
       pgs.filter((pg) => pg.name !== productGroup.name)
     );
 
-    await Preferences.set({
-      key: this.PREFERENCES_PRODUCTGROUP_KEY,
-      value: JSON.stringify(this.productGroups()),
-    });
+    await this.productStorageService.setProductGroups(this.productGroups());
   }
 
   existProductGroupByName(productGroupName: string): boolean {
@@ -71,5 +53,9 @@ export class ProductService {
       (pg) => pg.name.toUpperCase() === productGroupNameFormatted
     );
     return product;
+  }
+
+  private async getProductGroups() {
+    this.productGroups.set(await this.productStorageService.getProductGroups());
   }
 }
