@@ -78,26 +78,26 @@ export class ProductGroupListComponent {
     this.handleActionSheetResults(result, productGroup);
   }
 
-  private handleActionSheetResults(
+  private async handleActionSheetResults(
     result: OverlayEventDetail,
     productGroup: ProductGroup
   ) {
     const action = result?.data?.action;
     if (action === 'delete') {
-      this.productService.deleteProductGroup(productGroup);
+      await this.productService.deleteProductGroup(productGroup);
     } else if (action === 'edit') {
       this.openModal(productGroup);
     }
   }
 
-  private handleModalResults(
+  private async handleModalResults(
     productGroup: ProductGroup | undefined,
     result: string | undefined
   ) {
     if (productGroup) {
-      this.productService.editProductGroup(productGroup, result || '');
+      await this.productService.editProductGroup(productGroup, result || '');
     } else {
-      this.productService.addProductGroup(result || '');
+      await this.productService.addProductGroup(result || '');
     }
   }
 }

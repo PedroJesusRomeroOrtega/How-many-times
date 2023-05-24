@@ -1,34 +1,44 @@
 import {Injectable, signal} from '@angular/core';
 import {ProductGroup} from './product';
+import {ProductStorageService} from './product-storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
-  productGroups = signal<ProductGroup[]>([
-    {name: 'Kitesurf'},
-    {name: 'Bikes'},
-    {name: 'Scuba'},
-  ]);
+  productGroups = signal<ProductGroup[]>([]);
 
-  addProductGroup(groupName: string) {
+  constructor(private productStorageService: ProductStorageService) {
+    this.getProductGroups();
+  }
+
+  async addProductGroup(groupName: string) {
     this.productGroups.mutate((productGroups) =>
       productGroups.push({name: groupName})
     );
+
+    await this.productStorageService.setProductGroups(this.productGroups());
   }
 
-  editProductGroup(productGroup: ProductGroup, newProductGroupName: string) {
+  async editProductGroup(
+    productGroup: ProductGroup,
+    newProductGroupName: string
+  ) {
     this.productGroups.update((pgs) =>
       pgs.map((pg) =>
         pg.name === productGroup.name ? {name: newProductGroupName} : pg
       )
     );
+
+    await this.productStorageService.setProductGroups(this.productGroups());
   }
 
-  deleteProductGroup(productGroup: ProductGroup) {
+  async deleteProductGroup(productGroup: ProductGroup) {
     this.productGroups.update((pgs) =>
       pgs.filter((pg) => pg.name !== productGroup.name)
     );
+
+    await this.productStorageService.setProductGroups(this.productGroups());
   }
 
   existProductGroupByName(productGroupName: string): boolean {
@@ -43,5 +53,9 @@ export class ProductService {
       (pg) => pg.name.toUpperCase() === productGroupNameFormatted
     );
     return product;
+  }
+
+  private async getProductGroups() {
+    this.productGroups.set(await this.productStorageService.getProductGroups());
   }
 }
