@@ -1,6 +1,6 @@
 import {inject} from '@angular/core';
 import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
-import {ProductService} from '../products';
+import {ProductService} from '../products/services';
 
 export class CustomValidators {
   static uniqueProductGroupName(): ValidatorFn {

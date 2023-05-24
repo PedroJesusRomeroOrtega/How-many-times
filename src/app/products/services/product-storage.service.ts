@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Preferences} from '@capacitor/preferences';
-import {ProductGroup} from './product';
+import {ProductGroup} from '../product';
 
 @Injectable({
   providedIn: 'root',

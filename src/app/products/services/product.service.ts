@@ -1,6 +1,6 @@
 import {Injectable, signal} from '@angular/core';
-import {ProductGroup} from './product';
 import {ProductStorageService} from './product-storage.service';
+import {ProductGroup} from '../product';
 
 @Injectable({
   providedIn: 'root',

@@ -8,9 +8,9 @@ import {
   ModalController,
 } from '@ionic/angular';
 import {OverlayEventDetail} from '@ionic/core/components';
-import {ProductService} from '../product.service';
 import {ProductGroupNewComponent} from '../product-group-new/product-group-new.component';
 import {ProductGroup} from '../product';
+import {ProductService} from '../services';
 
 @Component({
   selector: 'app-product-group-list',
