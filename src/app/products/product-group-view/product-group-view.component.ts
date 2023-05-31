@@ -4,14 +4,14 @@ import {IonicModule} from '@ionic/angular';
 import {ProductService} from '../services';
 
 @Component({
-  selector: 'app-product-list',
+  selector: 'app-product-group-view',
   standalone: true,
   imports: [CommonModule, IonicModule],
-  templateUrl: './product-list.component.html',
+  templateUrl: './product-group-view.component.html',
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductListComponent {
+export class ProductGroupViewComponent {
   private productService = inject(ProductService);
 
   selectedProductGroup = this.productService.selectedProductGroup;

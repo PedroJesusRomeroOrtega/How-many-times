@@ -8,7 +8,7 @@
   <ion-list>
     <ion-item
       button
-      [routerLink]="['/products']"
+      [routerLink]="['/product-group/', productGroup.name]"
       (click)="productGroupSelected(productGroup)"
       *ngFor="let productGroup of productGroups()"
     >
