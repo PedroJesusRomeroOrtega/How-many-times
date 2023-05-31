@@ -1,6 +1,7 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {IonicModule} from '@ionic/angular';
+import {ProductService} from '../services';
 
 @Component({
   selector: 'app-product-list',
@@ -10,4 +11,8 @@ import {IonicModule} from '@ionic/angular';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductListComponent {}
+export class ProductListComponent {
+  private productService = inject(ProductService);
+
+  selectedProductGroup = this.productService.selectedProductGroup;
+}

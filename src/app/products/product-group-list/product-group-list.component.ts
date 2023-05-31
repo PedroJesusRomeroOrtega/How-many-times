@@ -1,4 +1,9 @@
-import {ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
   ActionSheetController,
@@ -23,6 +28,10 @@ import {RouterLink} from '@angular/router';
 })
 export class ProductGroupListComponent {
   @ViewChild(IonModal) modal!: IonModal;
+  private productService = inject(ProductService);
+  private actionSheetCtrl = inject(ActionSheetController);
+  private modalCtrl = inject(ModalController);
+
   productGroups = this.productService.productGroups;
   private actionSheetButtons: ActionSheetOptions = {
     header: 'Actions',
@@ -50,11 +59,9 @@ export class ProductGroupListComponent {
     ],
   };
 
-  constructor(
-    private productService: ProductService,
-    private actionSheetCtrl: ActionSheetController,
-    private modalCtrl: ModalController
-  ) {}
+  productGroupSelected(productGroup: ProductGroup) {
+    this.productService.productGroupSelected(productGroup);
+  }
 
   async openModal(productGroup: ProductGroup | undefined = undefined) {
     const modal = await this.modalCtrl.create({

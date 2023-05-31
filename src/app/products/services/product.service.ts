@@ -1,4 +1,4 @@
-import {Injectable, signal} from '@angular/core';
+import {Injectable, inject, signal} from '@angular/core';
 import {ProductStorageService} from './product-storage.service';
 import {ProductGroup} from '../product';
 
@@ -6,10 +6,20 @@ import {ProductGroup} from '../product';
   providedIn: 'root',
 })
 export class ProductService {
-  productGroups = signal<ProductGroup[]>([]);
+  private productStorageService = inject(ProductStorageService);
 
-  constructor(private productStorageService: ProductStorageService) {
+  productGroups = signal<ProductGroup[]>([]);
+  selectedProductGroup = signal<ProductGroup | undefined>(undefined);
+
+  constructor() {
     this.getProductGroups();
+  }
+
+  productGroupSelected(productGroup: ProductGroup) {
+    const foundProductGroup = this.productGroups().find(
+      (pg) => pg.name === productGroup.name
+    );
+    this.selectedProductGroup.set(foundProductGroup);
   }
 
   async addProductGroup(groupName: string) {

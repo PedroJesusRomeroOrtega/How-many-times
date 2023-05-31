@@ -9,6 +9,7 @@
     <ion-item
       button
       [routerLink]="['/products']"
+      (click)="productGroupSelected(productGroup)"
       *ngFor="let productGroup of productGroups()"
     >
       <ion-label>{{ productGroup.name }}</ion-label>
