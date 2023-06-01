@@ -60,7 +60,7 @@ export class ProductGroupListComponent {
   };
 
   productGroupSelected(productGroup: ProductGroup) {
-    this.productService.productGroupSelected(productGroup);
+    this.productService.productGroupSelect(productGroup);
   }
 
   async openModal(productGroup: ProductGroup | undefined = undefined) {

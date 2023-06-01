@@ -15,7 +15,7 @@ export class ProductService {
     this.getProductGroups();
   }
 
-  productGroupSelected(productGroup: ProductGroup) {
+  productGroupSelect(productGroup: ProductGroup) {
     const foundProductGroup = this.productGroups().find(
       (pg) => pg.name === productGroup.name
     );
@@ -24,7 +24,7 @@ export class ProductService {
 
   async addProductGroup(groupName: string) {
     this.productGroups.mutate((productGroups) =>
-      productGroups.push({name: groupName})
+      productGroups.push({name: groupName, products: [{name: 'cabrinha 8m'}]})
     );
 
     await this.productStorageService.setProductGroups(this.productGroups());
@@ -36,7 +36,7 @@ export class ProductService {
   ) {
     this.productGroups.update((pgs) =>
       pgs.map((pg) =>
-        pg.name === productGroup.name ? {name: newProductGroupName} : pg
+        pg.name === productGroup.name ? {...pg, name: newProductGroupName} : pg
       )
     );
 

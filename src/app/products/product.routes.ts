@@ -1,4 +1,5 @@
 import {Routes} from '@angular/router';
+import {productGroupSelectedResolver} from './product-group-selected.resolver';
 
 export const routes: Routes = [
   {
@@ -14,5 +15,6 @@ export const routes: Routes = [
       import('./product-group-view/product-group-view.component').then(
         (m) => m.ProductGroupViewComponent
       ),
+    canMatch: [productGroupSelectedResolver],
   },
 ];

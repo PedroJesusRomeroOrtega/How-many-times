@@ -6,6 +6,11 @@
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true">
+  <ion-list>
+    <ion-item *ngFor="let product of selectedProductGroup()?.products"
+      ><ion-label>{{ product.name }}</ion-label></ion-item
+    >
+  </ion-list>
   <ion-fab vertical="bottom" horizontal="center">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>
