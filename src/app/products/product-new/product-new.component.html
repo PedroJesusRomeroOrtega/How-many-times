@@ -1,0 +1,31 @@
+<form [formGroup]="productForm" (ngSubmit)="confirm()">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+      </ion-buttons>
+      <ion-title>Create group</ion-title>
+      <ion-buttons slot="end">
+        <ion-button
+          (click)="confirm()"
+          [strong]="true"
+          [disabled]="!productForm.valid"
+          >Confirm</ion-button
+        >
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding" [fullscreen]="true">
+    <ion-input
+      type="text"
+      label="Product name"
+      labelPlacement="floating"
+      placeholder="Enter product name"
+      clearInput="true"
+      [counter]="true"
+      [maxlength]="MAX_PRODUCT_NAME_LENGTH"
+      formControlName="name"
+      [errorText]="errorMessage(name)"
+    />
+  </ion-content>
+</form>

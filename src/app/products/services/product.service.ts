@@ -1,6 +1,6 @@
 import {Injectable, inject, signal} from '@angular/core';
 import {ProductStorageService} from './product-storage.service';
-import {ProductGroup} from '../product';
+import {Product, ProductGroup} from '../product';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +13,17 @@ export class ProductService {
 
   constructor() {
     this.getProductGroups();
+  }
+
+  async addProduct(product: Product) {
+    if (this.selectedProductGroup()) {
+      // TODO: check if the product exist
+      this.selectedProductGroup.mutate((productGroup) =>
+        productGroup?.products?.push(product)
+      );
+
+      await this.productStorageService.setProductGroups(this.productGroups());
+    }
   }
 
   productGroupSelect(productGroup: ProductGroup) {
