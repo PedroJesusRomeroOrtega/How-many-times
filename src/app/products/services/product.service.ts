@@ -26,6 +26,32 @@ export class ProductService {
     }
   }
 
+  async deleteProduct(product: Product) {
+    if (this.selectedProductGroup()) {
+      const selectedProductGroup = this.selectedProductGroup() as ProductGroup;
+
+      const selectedProductGroupFiltered = {
+        ...selectedProductGroup,
+        products: selectedProductGroup?.products.filter(
+          (p) => p.name !== product.name
+        ),
+      } as ProductGroup;
+
+      this.selectedProductGroup.set(selectedProductGroupFiltered);
+
+      let productGroupsFiltered = this.productGroups().filter(
+        (pg) => pg.name !== this.selectedProductGroup()?.name
+      );
+      productGroupsFiltered = [
+        ...productGroupsFiltered,
+        selectedProductGroupFiltered,
+      ];
+      this.productGroups.set(productGroupsFiltered);
+
+      await this.productStorageService.setProductGroups(productGroupsFiltered);
+    }
+  }
+
   productGroupSelect(productGroup: ProductGroup) {
     const foundProductGroup = this.productGroups().find(
       (pg) => pg.name === productGroup.name
