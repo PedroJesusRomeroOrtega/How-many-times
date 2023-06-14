@@ -12,7 +12,7 @@ export class ProductService {
   selectedProductGroup = signal<ProductGroup | undefined>(undefined);
 
   constructor() {
-    this.getProductGroups();
+    this.loadProductGroupsFromStorage();
   }
 
   async addProduct(product: Product) {
@@ -30,27 +30,35 @@ export class ProductService {
     if (this.selectedProductGroup()) {
       const selectedProductGroup = this.selectedProductGroup() as ProductGroup;
 
-      const selectedProductGroupFiltered = {
-        ...selectedProductGroup,
-        products: selectedProductGroup?.products.filter(
-          (p) => p.name !== product.name
-        ),
-      } as ProductGroup;
+      const selectedProductGroupWithProductDeleted =
+        this.deleteProductFromProductGroup(selectedProductGroup, product);
 
-      this.selectedProductGroup.set(selectedProductGroupFiltered);
+      this.selectedProductGroup.set(selectedProductGroupWithProductDeleted);
 
-      let productGroupsFiltered = this.productGroups().filter(
-        (pg) => pg.name !== this.selectedProductGroup()?.name
+      const productGroupsFiltered = this.filterProductGroup(
+        this.productGroups(),
+        selectedProductGroup
       );
-      productGroupsFiltered = [
+      const productGroupsWithProductDeleted = [
         ...productGroupsFiltered,
-        selectedProductGroupFiltered,
+        this.selectedProductGroup() as ProductGroup,
       ];
-      this.productGroups.set(productGroupsFiltered);
+      this.productGroups.set(productGroupsWithProductDeleted);
 
-      await this.productStorageService.setProductGroups(productGroupsFiltered);
+      await this.productStorageService.setProductGroups(
+        productGroupsWithProductDeleted
+      );
     }
   }
+
+  private deleteProductFromProductGroup = (
+    productGroup: ProductGroup,
+    product: Product
+  ) =>
+    ({
+      ...productGroup,
+      products: productGroup?.products.filter((p) => p.name !== product.name),
+    } as ProductGroup);
 
   productGroupSelect(productGroup: ProductGroup) {
     const foundProductGroup = this.productGroups().find(
@@ -60,14 +68,27 @@ export class ProductService {
   }
 
   async addProductGroup(groupName: string) {
-    this.productGroups.mutate((productGroups) =>
-      productGroups.push({name: groupName, products: [{name: 'cabrinha 8m'}]})
-    );
+    this.addProductGroupFromClient(groupName);
 
     await this.productStorageService.setProductGroups(this.productGroups());
   }
 
+  private addProductGroupFromClient(groupName: string) {
+    this.productGroups.mutate((productGroups) =>
+      productGroups.push({name: groupName, products: []})
+    );
+  }
+
   async editProductGroup(
+    productGroup: ProductGroup,
+    newProductGroupName: string
+  ) {
+    this.editProductGroupFromClient(productGroup, newProductGroupName);
+
+    await this.productStorageService.setProductGroups(this.productGroups());
+  }
+
+  private editProductGroupFromClient(
     productGroup: ProductGroup,
     newProductGroupName: string
   ) {
@@ -76,16 +97,25 @@ export class ProductService {
         pg.name === productGroup.name ? {...pg, name: newProductGroupName} : pg
       )
     );
+  }
+
+  async deleteProductGroup(productGroup: ProductGroup) {
+    this.deleteProductGroupFromClient(productGroup);
 
     await this.productStorageService.setProductGroups(this.productGroups());
   }
 
-  async deleteProductGroup(productGroup: ProductGroup) {
+  private deleteProductGroupFromClient(productGroup: ProductGroup) {
     this.productGroups.update((pgs) =>
-      pgs.filter((pg) => pg.name !== productGroup.name)
+      this.filterProductGroup(pgs, productGroup)
     );
+  }
 
-    await this.productStorageService.setProductGroups(this.productGroups());
+  private filterProductGroup(
+    productGroups: ProductGroup[],
+    productGroup: ProductGroup
+  ) {
+    return productGroups.filter((pg) => pg.name !== productGroup?.name);
   }
 
   existProductGroupByName(productGroupName: string): boolean {
@@ -102,7 +132,7 @@ export class ProductService {
     return product;
   }
 
-  private async getProductGroups() {
+  private async loadProductGroupsFromStorage() {
     this.productGroups.set(await this.productStorageService.getProductGroups());
   }
 }
