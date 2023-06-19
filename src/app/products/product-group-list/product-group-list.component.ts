@@ -13,7 +13,7 @@ import {
   ModalController,
 } from '@ionic/angular';
 import {OverlayEventDetail} from '@ionic/core/components';
-import {ProductGroupNewComponent} from '../product-group-new/product-group-new.component';
+import {ProductGroupEditComponent} from '../product-group-edit/product-group-edit.component';
 import {ProductGroup} from '../product';
 import {ProductService} from '../services';
 import {RouterLink} from '@angular/router';
@@ -21,7 +21,7 @@ import {RouterLink} from '@angular/router';
 @Component({
   selector: 'app-product-group-list',
   standalone: true,
-  imports: [CommonModule, IonicModule, ProductGroupNewComponent, RouterLink],
+  imports: [CommonModule, IonicModule, ProductGroupEditComponent, RouterLink],
   templateUrl: './product-group-list.component.html',
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -65,7 +65,7 @@ export class ProductGroupListComponent {
 
   async openModal(productGroup: ProductGroup | undefined = undefined) {
     const modal = await this.modalCtrl.create({
-      component: ProductGroupNewComponent,
+      component: ProductGroupEditComponent,
       componentProps: {'productGroup': productGroup},
     });
     await modal.present();

@@ -6,14 +6,14 @@ import {CustomValidators, errorMessage} from 'src/app/shared';
 import {ProductGroup} from '../product';
 
 @Component({
-  selector: 'app-product-group-new',
+  selector: 'app-product-group-edit',
   standalone: true,
   imports: [CommonModule, IonicModule, ReactiveFormsModule],
-  templateUrl: './product-group-new.component.html',
+  templateUrl: './product-group-edit.component.html',
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductGroupNewComponent implements OnInit {
+export class ProductGroupEditComponent implements OnInit {
   MAX_PRODUCTGROUP_NAME_LENGTH = 30;
   @Input() productGroup: ProductGroup | undefined;
   productGroupName = new FormControl('', [
