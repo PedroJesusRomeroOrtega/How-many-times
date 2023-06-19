@@ -1,6 +1,11 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import {IonicModule, ModalController} from '@ionic/angular';
 import {CustomValidators, errorMessage} from 'src/app/shared';
 import {ProductGroup} from '../product';
@@ -16,19 +21,28 @@ import {ProductGroup} from '../product';
 export class ProductGroupEditComponent implements OnInit {
   MAX_PRODUCTGROUP_NAME_LENGTH = 30;
   @Input() productGroup: ProductGroup | undefined;
-  productGroupName = new FormControl('', [
-    Validators.required,
-    Validators.minLength(3),
-    Validators.maxLength(this.MAX_PRODUCTGROUP_NAME_LENGTH),
-    CustomValidators.uniqueProductGroupName(),
-    CustomValidators.noWhitespaceValidator(),
-  ]);
+  productGroupForm = this.fb.group({
+    name: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(this.MAX_PRODUCTGROUP_NAME_LENGTH),
+        CustomValidators.uniqueProductGroupName(),
+        CustomValidators.noWhitespaceValidator(),
+      ],
+    ],
+  });
   errorMessage = errorMessage;
 
-  constructor(private modalCtrl: ModalController) {}
+  get name() {
+    return this.productGroupForm.get('name') as FormControl<string>;
+  }
+
+  constructor(private modalCtrl: ModalController, private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.productGroupName.setValue(this.productGroup?.name || '');
+    this.productGroupForm.patchValue({name: this.productGroup?.name || ''});
   }
 
   cancel() {
@@ -36,14 +50,13 @@ export class ProductGroupEditComponent implements OnInit {
   }
 
   confirm() {
-    const productGroupName = this.productGroupName.value?.trim() || '';
     const editedProductGroup = this.productGroup
       ? {
           ...this.productGroup,
-          name: productGroupName,
+          ...this.productGroupForm.value,
         }
       : {
-          name: productGroupName,
+          ...this.productGroupForm.value,
           products: [],
         };
 

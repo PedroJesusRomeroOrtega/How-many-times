@@ -1,29 +1,31 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
-    </ion-buttons>
-    <ion-title>Create group</ion-title>
-    <ion-buttons slot="end">
-      <ion-button
-        (click)="confirm()"
-        [strong]="true"
-        [disabled]="!productGroupName.valid"
-        >Confirm</ion-button
-      >
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-<ion-content class="ion-padding" [fullscreen]="true">
-  <ion-input
-    type="text"
-    label="Group name"
-    labelPlacement="floating"
-    placeholder="Enter group name"
-    clearInput="true"
-    [counter]="true"
-    [maxlength]="MAX_PRODUCTGROUP_NAME_LENGTH"
-    [formControl]="productGroupName"
-    [errorText]="errorMessage(productGroupName)"
-  />
-</ion-content>
+<form [formGroup]="productGroupForm" (ngSubmit)="confirm()">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+      </ion-buttons>
+      <ion-title>Create group</ion-title>
+      <ion-buttons slot="end">
+        <ion-button
+          (click)="confirm()"
+          [strong]="true"
+          [disabled]="!productGroupForm.valid"
+          >Confirm</ion-button
+        >
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding" [fullscreen]="true">
+    <ion-input
+      type="text"
+      label="Group name"
+      labelPlacement="floating"
+      placeholder="Enter group name"
+      clearInput="true"
+      [counter]="true"
+      [maxlength]="MAX_PRODUCTGROUP_NAME_LENGTH"
+      [formControl]="name"
+      [errorText]="errorMessage(name)"
+    />
+  </ion-content>
+</form>
