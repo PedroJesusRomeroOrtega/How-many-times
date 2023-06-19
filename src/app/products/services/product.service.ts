@@ -80,21 +80,21 @@ export class ProductService {
   }
 
   async editProductGroup(
-    productGroup: ProductGroup,
-    newProductGroupName: string
+    oldProductGroup: ProductGroup,
+    editedProductGroup: ProductGroup
   ) {
-    this.editProductGroupFromClient(productGroup, newProductGroupName);
+    this.editProductGroupFromClient(oldProductGroup, editedProductGroup);
 
     await this.productStorageService.setProductGroups(this.productGroups());
   }
 
   private editProductGroupFromClient(
-    productGroup: ProductGroup,
-    newProductGroupName: string
+    oldProductGroup: ProductGroup,
+    editedProductGroup: ProductGroup
   ) {
     this.productGroups.update((pgs) =>
       pgs.map((pg) =>
-        pg.name === productGroup.name ? {...pg, name: newProductGroupName} : pg
+        pg.name === oldProductGroup.name ? {...pg, ...editedProductGroup} : pg
       )
     );
   }

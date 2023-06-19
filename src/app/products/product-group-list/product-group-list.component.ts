@@ -106,7 +106,7 @@ export class ProductGroupListComponent {
     if (oldProductGroup) {
       await this.productService.editProductGroup(
         oldProductGroup,
-        editedProductGroup.name
+        editedProductGroup
       );
     } else {
       await this.productService.addProductGroup(editedProductGroup);
