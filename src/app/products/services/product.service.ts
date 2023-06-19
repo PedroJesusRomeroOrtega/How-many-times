@@ -67,15 +67,15 @@ export class ProductService {
     this.selectedProductGroup.set(foundProductGroup);
   }
 
-  async addProductGroup(groupName: string) {
-    this.addProductGroupFromClient(groupName);
+  async addProductGroup(productGroup: ProductGroup) {
+    this.addProductGroupFromClient(productGroup);
 
     await this.productStorageService.setProductGroups(this.productGroups());
   }
 
-  private addProductGroupFromClient(groupName: string) {
+  private addProductGroupFromClient(productGroup: ProductGroup) {
     this.productGroups.mutate((productGroups) =>
-      productGroups.push({name: groupName, products: []})
+      productGroups.push(productGroup)
     );
   }
 

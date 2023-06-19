@@ -66,13 +66,14 @@ export class ProductGroupListComponent {
   async openModal(productGroup: ProductGroup | undefined = undefined) {
     const modal = await this.modalCtrl.create({
       component: ProductGroupNewComponent,
-      componentProps: {'name': productGroup?.name},
+      componentProps: {'productGroup': productGroup},
     });
     await modal.present();
 
-    const {data, role} = await modal.onWillDismiss();
+    const {data: editedProductGroup, role} =
+      await modal.onWillDismiss<ProductGroup>();
     if (role === 'confirm') {
-      this.handleModalResults(productGroup, data);
+      this.handleModalResults(productGroup, editedProductGroup as ProductGroup);
     }
   }
 
@@ -99,13 +100,16 @@ export class ProductGroupListComponent {
   }
 
   private async handleModalResults(
-    productGroup: ProductGroup | undefined,
-    result: string | undefined
+    oldProductGroup: ProductGroup | undefined,
+    editedProductGroup: ProductGroup
   ) {
-    if (productGroup) {
-      await this.productService.editProductGroup(productGroup, result || '');
+    if (oldProductGroup) {
+      await this.productService.editProductGroup(
+        oldProductGroup,
+        editedProductGroup.name
+      );
     } else {
-      await this.productService.addProductGroup(result || '');
+      await this.productService.addProductGroup(editedProductGroup);
     }
   }
 }
