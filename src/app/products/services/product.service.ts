@@ -26,29 +26,58 @@ export class ProductService {
     }
   }
 
+  async editProduct(oldProduct: Product, editedProduct: Product) {
+    if (!this.selectedProductGroup()) return;
+
+    const selectedProductGroup = this.selectedProductGroup() as ProductGroup;
+
+    const productsWithEdited = selectedProductGroup.products.map((p) =>
+      p.name === oldProduct.name ? {...p, ...editedProduct} : p
+    );
+
+    this.selectedProductGroup.set({
+      ...selectedProductGroup,
+      products: productsWithEdited,
+    });
+
+    const productGroupsFiltered = this.filterProductGroup(
+      this.productGroups(),
+      selectedProductGroup
+    );
+    const productGroupsWithProductEdited = [
+      ...productGroupsFiltered,
+      this.selectedProductGroup() as ProductGroup,
+    ];
+    this.productGroups.set(productGroupsWithProductEdited);
+
+    await this.productStorageService.setProductGroups(
+      productGroupsWithProductEdited
+    );
+  }
+
   async deleteProduct(product: Product) {
-    if (this.selectedProductGroup()) {
-      const selectedProductGroup = this.selectedProductGroup() as ProductGroup;
+    if (!this.selectedProductGroup()) return;
 
-      const selectedProductGroupWithProductDeleted =
-        this.deleteProductFromProductGroup(selectedProductGroup, product);
+    const selectedProductGroup = this.selectedProductGroup() as ProductGroup;
 
-      this.selectedProductGroup.set(selectedProductGroupWithProductDeleted);
+    const selectedProductGroupWithProductDeleted =
+      this.deleteProductFromProductGroup(selectedProductGroup, product);
 
-      const productGroupsFiltered = this.filterProductGroup(
-        this.productGroups(),
-        selectedProductGroup
-      );
-      const productGroupsWithProductDeleted = [
-        ...productGroupsFiltered,
-        this.selectedProductGroup() as ProductGroup,
-      ];
-      this.productGroups.set(productGroupsWithProductDeleted);
+    this.selectedProductGroup.set(selectedProductGroupWithProductDeleted);
 
-      await this.productStorageService.setProductGroups(
-        productGroupsWithProductDeleted
-      );
-    }
+    const productGroupsFiltered = this.filterProductGroup(
+      this.productGroups(),
+      selectedProductGroup
+    );
+    const productGroupsWithProductDeleted = [
+      ...productGroupsFiltered,
+      this.selectedProductGroup() as ProductGroup,
+    ];
+    this.productGroups.set(productGroupsWithProductDeleted);
+
+    await this.productStorageService.setProductGroups(
+      productGroupsWithProductDeleted
+    );
   }
 
   private deleteProductFromProductGroup = (

@@ -35,12 +35,12 @@ export class ProductGroupViewComponent {
           action: 'delete',
         },
       },
-      // {
-      //   text: 'Edit',
-      //   data: {
-      //     action: 'edit',
-      //   },
-      // },
+      {
+        text: 'Edit',
+        data: {
+          action: 'edit',
+        },
+      },
       {
         text: 'Cancel',
         role: 'cancel',
@@ -51,25 +51,26 @@ export class ProductGroupViewComponent {
     ],
   };
 
-  async openModal() {
+  async openModal(product: Product | undefined = undefined) {
     const modal = await this.modalCtrl.create({
       component: ProductEditComponent,
+      componentProps: {'product': product},
     });
     await modal.present();
-    const {data, role} = await modal.onWillDismiss();
+    const {data: editedProduct, role} = await modal.onWillDismiss<Product>();
     if (role === 'confirm') {
-      this.handleModalResults(data);
+      this.handleModalResults(product, editedProduct as Product);
     }
   }
 
-  async presentActionSheet(productGroup: Product) {
+  async presentActionSheet(product: Product) {
     const actionSheet = await this.actionSheetCtrl.create(
       this.actionSheetButtons
     );
 
     await actionSheet.present();
     const result = await actionSheet.onWillDismiss();
-    this.handleActionSheetResults(result, productGroup);
+    this.handleActionSheetResults(result, product);
   }
 
   private async handleActionSheetResults(
@@ -79,17 +80,19 @@ export class ProductGroupViewComponent {
     const action = result?.data?.action;
     if (action === 'delete') {
       await this.productService.deleteProduct(product);
+    } else if (action === 'edit') {
+      this.openModal(product);
     }
-    //  else if (action === 'edit') {
-    //   this.openModal(productGroup);
-    // }
   }
 
-  private async handleModalResults(result: Product) {
-    // if (productGroup) {
-    //   await this.productService.editProduct(productGroup, result || '');
-    // } else {
-    await this.productService.addProduct(result);
-    // }
+  private async handleModalResults(
+    oldProduct: Product | undefined,
+    editedProduct: Product
+  ) {
+    if (oldProduct) {
+      await this.productService.editProduct(oldProduct, editedProduct);
+    } else {
+      await this.productService.addProduct(editedProduct);
+    }
   }
 }

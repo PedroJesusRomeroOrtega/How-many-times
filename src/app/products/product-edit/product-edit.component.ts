@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {IonicModule, ModalController} from '@ionic/angular';
 import {
@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import {CustomValidators, errorMessage} from 'src/app/shared';
+import {Product} from '../product';
 
 @Component({
   selector: 'app-product-new',
@@ -17,9 +18,9 @@ import {CustomValidators, errorMessage} from 'src/app/shared';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductEditComponent {
+export class ProductEditComponent implements OnInit {
   MAX_PRODUCT_NAME_LENGTH = 30;
-  errorMessage = errorMessage;
+  @Input() product: Product | undefined;
   productForm = this.fb.group({
     name: [
       '',
@@ -32,6 +33,7 @@ export class ProductEditComponent {
       ],
     ],
   });
+  errorMessage = errorMessage;
 
   get name() {
     return this.productForm.get('name') as FormControl<string>;
@@ -39,11 +41,19 @@ export class ProductEditComponent {
 
   constructor(private modalCtrl: ModalController, private fb: FormBuilder) {}
 
+  ngOnInit(): void {
+    this.productForm.patchValue({name: this.product?.name || ''});
+  }
+
   cancel() {
     return this.modalCtrl.dismiss('cancel');
   }
 
   confirm() {
-    return this.modalCtrl.dismiss(this.productForm.value, 'confirm');
+    const editedProduct = this.product
+      ? {...this.product, ...this.productForm.value}
+      : {...this.productForm.value};
+
+    return this.modalCtrl.dismiss(editedProduct, 'confirm');
   }
 }
