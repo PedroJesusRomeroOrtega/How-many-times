@@ -13,11 +13,11 @@ import {CustomValidators, errorMessage} from 'src/app/shared';
   selector: 'app-product-new',
   standalone: true,
   imports: [CommonModule, IonicModule, ReactiveFormsModule],
-  templateUrl: './product-new.component.html',
+  templateUrl: './product-edit.component.html',
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductNewComponent {
+export class ProductEditComponent {
   MAX_PRODUCT_NAME_LENGTH = 30;
   errorMessage = errorMessage;
   productForm = this.fb.group({

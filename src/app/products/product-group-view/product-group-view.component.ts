@@ -8,7 +8,7 @@ import {
 } from '@ionic/angular';
 import {ProductService} from '../services';
 import {Product} from '../product';
-import {ProductNewComponent} from '../product-new/product-new.component';
+import {ProductEditComponent} from '../product-edit/product-edit.component';
 import {OverlayEventDetail} from '@ionic/core';
 
 @Component({
@@ -53,7 +53,7 @@ export class ProductGroupViewComponent {
 
   async openModal() {
     const modal = await this.modalCtrl.create({
-      component: ProductNewComponent,
+      component: ProductEditComponent,
     });
     await modal.present();
     const {data, role} = await modal.onWillDismiss();
