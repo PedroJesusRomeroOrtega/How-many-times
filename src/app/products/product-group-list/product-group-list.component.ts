@@ -16,7 +16,7 @@ import {OverlayEventDetail} from '@ionic/core/components';
 import {ProductGroupEditComponent} from '../product-group-edit/product-group-edit.component';
 import {ProductGroup} from '../product';
 import {ProductService} from '../services';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-product-group-list',
@@ -31,6 +31,7 @@ export class ProductGroupListComponent {
   private productService = inject(ProductService);
   private actionSheetCtrl = inject(ActionSheetController);
   private modalCtrl = inject(ModalController);
+  private router = inject(Router);
 
   productGroups = this.productService.productGroups;
   private actionSheetButtons: ActionSheetOptions = {
@@ -61,6 +62,7 @@ export class ProductGroupListComponent {
 
   productGroupSelected(productGroup: ProductGroup) {
     this.productService.productGroupSelect(productGroup);
+    this.router.navigate(['/product-group/', productGroup.name]);
   }
 
   async openModal(productGroup: ProductGroup | undefined = undefined) {

@@ -8,12 +8,14 @@
   <ion-list>
     <ion-item
       button
-      [routerLink]="['/product-group/', productGroup.name]"
       (click)="productGroupSelected(productGroup)"
       *ngFor="let productGroup of productGroups()"
     >
       <ion-label>{{ productGroup.name }}</ion-label>
-      <ion-button slot="end" (click)="presentActionSheet(productGroup)">
+      <ion-button
+        slot="end"
+        (click)="presentActionSheet(productGroup); $event.stopPropagation()"
+      >
         <ion-icon slot="icon-only" name="ellipsis-vertical-outline" />
       </ion-button>
     </ion-item>
